@@ -17,6 +17,7 @@ Angeline Visitacion
 
 Program Details:
 Here's how the MotorPH Payroll System works:
+
 Authentication
 The program starts with a login screen that accepts two roles:
 Employee (view personal info) or payroll_staff (process payroll).
