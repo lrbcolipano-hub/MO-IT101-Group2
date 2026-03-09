@@ -1,0 +1,70 @@
+# MO-IT101-Group2
+MotorPH Payroll System
+
+Team Details and Contribution:
+Brixter Colipano
+  -Corrected and finalized the code to match Milestone 2 submission. Created the repository for everyone, lead the group and facilated task for each members. Checked each members task and corrected and revised the whole project plan.
+
+Gerald Labini
+  -Revised Milestone 1 output to correct and match for Milestone 2 submission. Created codes that can be integrated to the main code and edited the README file.
+
+Rachelda Honrado
+  -Created codes for early basis of the code that can be integrated to the main code.
+
+Angeline Visitacion
+  -Project timeline and project plan facilator
+
+
+Program Details:
+Here's how the MotorPH Payroll System works:
+
+Authentication
+-The program starts with a login screen that accepts two roles:
+-Employee (view personal info) or payroll_staff (process payroll).
+-Both use the hardcoded password 12345. Invalid credentials terminate the program immediately.
+
+Employee Role
+-Employees get a simple menu to look up their own record by employee number.
+-It reads the employee CSV and prints their ID, full name, and birthdate.
+-Nothing else is accessible to this role.
+
+Payroll Staff Role
+-Payroll staff can process payroll either for a single employee (by ID) or for all employees (IDs 10001–10034 in sequence).
+For each employee, it prints basic details then runs the full payroll calculation.
+
+Payroll Calculation Logic
+-For each employee, the system loops through months June–December 2024 and splits each month into two cutoff periods: the 1st–15th and 16th–end of month.
+
+Hours computation follows these rules per day:
+-Login after 8:10 AM loses the grace period and counts actual time
+-Logout is capped at 5:00 PM (no overtime)
+-A 1-hour lunch break is deducted if worked more than 60 minutes
+-Maximum counted hours per day is 8
+
+Gross income = total hours worked × hourly rate
+Deductions (applied on the second half only):
+
+SSS — tiered contribution based on gross income, capped at ₱1,125
+Formula:
+monthly gross income × 4.5%The result is then clamped — if it falls below ₱135, it's set to ₱135 (the floor). If it exceeds ₱1,125, it's capped there. So for example, an employee earning ₱25,000/month pays ₱25,000 × 0.045 = ₱1,125 — right at the cap. Someone earning ₱2,000/month would compute ₱2,000 × 0.045 = ₱90, which is below the floor, so they still pay ₱135.One important detail: SSS is computed using the monthly gross (both cutoff periods combined), not just the second half's earnings.
+
+PhilHealth — 3% of basic salary, floored at ₱300 and capped at ₱1,800
+Formula:
+basic salary × 3% — but the employee only pays half of this (1.5%). The employer covers the other half.The total contribution is clamped between ₱300 (floor) and ₱1,800 (cap) before splitting. So the employee's actual deduction ranges from ₱150 to ₱900. For example, an employee with a ₱20,000 basic salary: ₱20,000 × 0.03 = ₱600 total, so the employee pays ₱300.The original code had a subtle bug here — the method returned the full ₱600 but then silently divided by 2 somewhere else in the payroll engine, making it hard to follow. The corrected version has the method return the employee share directly so it's transparent.
+
+Pag-IBIG — 2% of basic salary, capped at ₱100
+Formula:
+If basic salary is below ₱1,500 → employee pays 1%
+If basic salary is ₱1,500 or above → employee pays 2%, but capped hard at ₱100
+So practically, almost every employee just pays ₱100/month because 2% of even a ₱6,000 salary already exceeds the cap. The cap only makes a real difference for very low earners.
+
+Withholding Tax — progressive bracket tax on taxable income (gross minus SSS, half of PhilHealth, and Pag-IBIG)
+
+First half payout = gross for days 1–15 with no deductions applied yet
+Second half payout = gross for days 16–end, minus all deductions, plus non-taxable allowances (rice subsidy, phone, clothing)
+The results are printed to the console per cutoff period, showing hours worked, gross salary, itemized deductions, and net salary.|
+
+
+
+Project Plan Link:
+https://docs.google.com/spreadsheets/d/1O_BfxXv0ziQmXMvVh4_AdIlEctFXZkXdV9-WNh-2wdg/edit?usp=sharing
