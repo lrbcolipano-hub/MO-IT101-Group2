@@ -286,6 +286,7 @@ public class PayrollSystem {
             System.out.println("    PhilHealth: "+computePhilHealth(basicSalary));
             System.out.println("    Pag-IBIG: "+computePagibigEmployee(basicSalary));
             System.out.println("    Tax: "+computeWithholdingTax(taxableIncome));
+            System.out.println("    Total Deductions: " + (computeWithholdingTax(taxableIncome)+ calculateSSSDeduction(monthlyGrossIncome) +(computePhilHealth(basicSalary)/2)+computePagibigEmployee(basicSalary)));
             System.out.println("Net Salary: "+secondHalfnetSalary);
             System.out.println("=========================");
         }
