@@ -269,7 +269,7 @@ public class PayrollSystem {
             double taxableIncome = monthlyGrossIncome - calculateSSSDeduction(monthlyGrossIncome) -(computePhilHealth(basicSalary)/2)-computePagibigEmployee(basicSalary);
             //nonTaxable is equaly to sum of the benefits listed on csv employee file. 
             //double nonTaxable = riceSubsidy + phoneAllowance + clothingAllowance; (still not needed for the current process flow)
-            //secondHalf net salary is equal to the gross of the second half minus withholding tax and deductions plus the nonTaxable.
+            //secondHalf net salary is equal to the gross of the second half minus withholding tax and deductions
             double secondHalfnetSalary = (secondHalf*hourlyRate) - computeWithholdingTax(taxableIncome)- calculateSSSDeduction(monthlyGrossIncome) -(computePhilHealth(basicSalary)/2)-computePagibigEmployee(basicSalary);
             System.out.println("========="+monthName+"=========");
             System.out.println("\nCutoff Date: " + monthName + " 1 to 15");
