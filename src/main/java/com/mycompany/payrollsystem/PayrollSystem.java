@@ -321,18 +321,20 @@ public class PayrollSystem {
     }   
     //method to calculateSSSDeduction
     public static double calculateSSSDeduction(double monthlyGrossIncome) {
-        // Simplified illustrative table (Actual SSS has specific ranges)
-        // Employee share is typically ~4.5% of Monthly Salary Credit (MSC)
+        //declare variable for initial contribution on the top most portion of the sss bracket for those grossincome bellow 3250.
+        double initialContribution = 135;
+        double increment =22.5;//each contribution is increased by 22.5 depending on their bracket position
+        double increasePerSalaryRange = 500;//there is a 500 increase per bracket in the salary range.
         
-        if (monthlyGrossIncome < 4250) {
-            return 135.00; // Example floor
-        } else if (monthlyGrossIncome >= 4250 && monthlyGrossIncome <= 29750) {
-            // Formula: 4.5% of the midpoint of the range
-            return Math.round((monthlyGrossIncome * 0.045) / 100.0) * 100.0 / 4.5; // Placeholder for exact table
-            // As a simplified formula:
-        } else {
-            return 1125.00; // Max contribution for high earners
-        }
+        
+        if (monthlyGrossIncome < 3250)//if gross is bellow 3250 will return the initial contribution as per the table
+            return initialContribution;
+        //declare a n variable that will store the bracket position of the gross salary using the Math.ceil method.
+        //by deducting 3250 on the grossincome the dividing it by 500, we will have 
+        //as long as the "monthlyGrossIncome -3250)/500" has an integer with decimal value, it means it is inside the bracket of its celing value, hence ceiling is used
+        double n =Math.ceil((monthlyGrossIncome -3250)/500);
+        //to get the SSS deduction, multiply the increment by its number bracket then add to the initial contribution, but the value must be cap at 1125 as per the sss table.
+        return Math.min(initialContribution + increment*n, 1125);
     }
     //method to computePhilHealth deduction
     static double computePhilHealth(double basicSalary) {
