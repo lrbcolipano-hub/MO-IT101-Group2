@@ -45,8 +45,19 @@ Gross income = total hours worked × hourly rate
 Deductions (applied on the second half only):
 
 SSS — tiered contribution based on gross income, capped at ₱1,125
+Formula:
+monthly gross income × 4.5%The result is then clamped — if it falls below ₱135, it's set to ₱135 (the floor). If it exceeds ₱1,125, it's capped there. So for example, an employee earning ₱25,000/month pays ₱25,000 × 0.045 = ₱1,125 — right at the cap. Someone earning ₱2,000/month would compute ₱2,000 × 0.045 = ₱90, which is below the floor, so they still pay ₱135.One important detail: SSS is computed using the monthly gross (both cutoff periods combined), not just the second half's earnings.
+
 PhilHealth — 3% of basic salary, floored at ₱300 and capped at ₱1,800
+Formula:
+basic salary × 3% — but the employee only pays half of this (1.5%). The employer covers the other half.The total contribution is clamped between ₱300 (floor) and ₱1,800 (cap) before splitting. So the employee's actual deduction ranges from ₱150 to ₱900. For example, an employee with a ₱20,000 basic salary: ₱20,000 × 0.03 = ₱600 total, so the employee pays ₱300.The original code had a subtle bug here — the method returned the full ₱600 but then silently divided by 2 somewhere else in the payroll engine, making it hard to follow. The corrected version has the method return the employee share directly so it's transparent.
+
 Pag-IBIG — 2% of basic salary, capped at ₱100
+Formula:
+If basic salary is below ₱1,500 → employee pays 1%
+If basic salary is ₱1,500 or above → employee pays 2%, but capped hard at ₱100
+So practically, almost every employee just pays ₱100/month because 2% of even a ₱6,000 salary already exceeds the cap. The cap only makes a real difference for very low earners.
+
 Withholding Tax — progressive bracket tax on taxable income (gross minus SSS, half of PhilHealth, and Pag-IBIG)
 
 First half payout = gross for days 1–15 with no deductions applied yet
