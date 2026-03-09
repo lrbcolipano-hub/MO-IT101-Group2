@@ -12,7 +12,7 @@ Rachelda Honrado
   -Created codes for early basis of the code that can be integrated to the main code.
 
 Angeline Visitacion
-  
+  -Project timeline and project plan facilator
 
 
 Program Details:
