@@ -161,11 +161,25 @@ public class PayrollSystem {
                     printWorkedDetails(attendaceFile,empFile, inputEmpId);//after printing from the printEmpDetails, run the printWorkedDetails method.
                 } 
                 else if (choice.equals("2")) {
-                    //if 2 is chosen, to print all employees details, for loop will be used and we will beclare the first employee id "10001" as the begining of the loop,
-                    for (int inputId = 10001; inputId<=10034;inputId++){//the for loop will end once inputId variable is equal to the last employee Id available "10034."
-                        String inputEmpId = Integer.toString(inputId);//convert the inputId into a string data type to make it compatible with other methods.
-                        printEmpDetails(empFile,inputEmpId);//run printEmpDetails to print employees details.
-                        printWorkedDetails(attendaceFile,empFile, inputEmpId);//run printWorkedDetails to print payslip details.
+                    //if 2 is chosen, print all employee details
+                        BufferedReader br;
+                    try {
+                        br = new BufferedReader(new FileReader(empFile));//use BufferedReader to read through the emp file
+                        String line;
+                        while ((line = br.readLine()) != null) {
+                            if (line.trim().isEmpty()) continue;
+                            String[] data = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+                            String inputEmpId = data[0];//store employee id in the data array
+                            if (!inputEmpId.equals("Employee #")){//set a conditional statement for it to skip the string "Employee #" written on the first column of the emp csv file.
+                            printEmpDetails(empFile,inputEmpId);//run printEmpDetails to print employees details.
+                            printWorkedDetails(attendaceFile,empFile, inputEmpId);//run printWorkedDetails to print payslip details.
+                            }
+                        }
+                        br.close();
+                    } catch (FileNotFoundException ex) {
+                        System.getLogger(PayrollSystem.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+                    } catch (IOException ex) {
+                        System.getLogger(PayrollSystem.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
                     }
                 }
                 else if (choice.equals("3")) {//if 3 is chosen, terminate the program.
