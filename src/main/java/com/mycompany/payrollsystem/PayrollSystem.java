@@ -180,10 +180,6 @@ public class PayrollSystem {
     public static void printWorkedDetails(String attendaceFile,String empFile, String inputEmpId){
         String id ="";//initialize the following variables as they will be needed for calculations in the method.
         double basicSalary = 0;
-        double riceSubsidy = 0;
-        double phoneAllowance = 0;
-        double clothingAllowance = 0;
-        double grossSemiMonthly = 0;
         double hourlyRate = 0;
         
 
@@ -196,10 +192,6 @@ public class PayrollSystem {
                 if (data[0].equals(inputEmpId)){//if condition so that the method below will work once input data equals inputEmpId.
                     id = data[0];
                     basicSalary = Double.parseDouble(data[13].replace("\"", "").replace(",", ""));
-                    riceSubsidy = Double.parseDouble(data[14].replace("\"", "").replace(",", ""));
-                    phoneAllowance = Double.parseDouble(data[15].replace("\"", "").replace(",", ""));
-                    clothingAllowance = Double.parseDouble(data[16].replace("\"", "").replace(",", ""));
-                    grossSemiMonthly = Double.parseDouble(data[17].replace("\"", "").replace(",", ""));
                     hourlyRate = Double.parseDouble(data[18]);
                 break;
                 }
@@ -267,8 +259,6 @@ public class PayrollSystem {
             double monthlyGrossIncome = (firstHalf+secondHalf)*hourlyRate;
             //taxable Income is equal to the monthly gross income deducted by sss, pagibig and half of the philhealth declared deduction.
             double taxableIncome = monthlyGrossIncome - calculateSSSDeduction(monthlyGrossIncome) -(computePhilHealth(basicSalary)/2)-computePagibigEmployee(basicSalary);
-            //nonTaxable is equaly to sum of the benefits listed on csv employee file. 
-            //double nonTaxable = riceSubsidy + phoneAllowance + clothingAllowance; (still not needed for the current process flow)
             //secondHalf net salary is equal to the gross of the second half minus withholding tax and deductions
             double secondHalfnetSalary = (secondHalf*hourlyRate) - computeWithholdingTax(taxableIncome)- calculateSSSDeduction(monthlyGrossIncome) -(computePhilHealth(basicSalary)/2)-computePagibigEmployee(basicSalary);
             System.out.println("========="+monthName+"=========");
@@ -283,7 +273,7 @@ public class PayrollSystem {
             System.out.println("Gross Salary: "+secondHalf*hourlyRate);
             System.out.println("Deductions: ");
             System.out.println("    SSS: "+calculateSSSDeduction(monthlyGrossIncome));
-            System.out.println("    PhilHealth: "+computePhilHealth(basicSalary));
+            System.out.println("    PhilHealth: "+computePhilHealth(basicSalary)/2);
             System.out.println("    Pag-IBIG: "+computePagibigEmployee(basicSalary));
             System.out.println("    Tax: "+computeWithholdingTax(taxableIncome));
             System.out.println("    Total Deductions: " + (computeWithholdingTax(taxableIncome)+ calculateSSSDeduction(monthlyGrossIncome) +(computePhilHealth(basicSalary)/2)+computePagibigEmployee(basicSalary)));
@@ -294,15 +284,22 @@ public class PayrollSystem {
     }
     //method to computeHours worked
     static double computeHours(LocalTime login, LocalTime logout) {
-
+        //Lets set 8:10 as the grace time as per the motorPH requirements
         LocalTime graceTime = LocalTime.of(8, 10);
+        //Lets set 17:00 as the cut off time as per the motorPH requirements
         LocalTime cutoffTime = LocalTime.of(17, 0);
+        //Lets set 8:00 as the official start time for any logins before the grace time.
+        LocalTime startTime = LocalTime.of(8,0);
 
         // Apply 17:00 cutoff
         if (logout.isAfter(cutoffTime)) {
             logout = cutoffTime;
         }
-
+        //Set 8:00 as the official start if login is not after grace time.
+        if (!login.isAfter(graceTime)) {
+            login = startTime;
+        }
+        
         long minutesWorked = Duration.between(login, logout).toMinutes();
 
         if (minutesWorked > 60) {
@@ -310,13 +307,8 @@ public class PayrollSystem {
         } else {
             minutesWorked = 0;
         }
-
         double hours = minutesWorked / 60.0;
-
         // grace period
-        if (!login.isAfter(graceTime)) {
-            return 8.0;
-        }
         return Math.min(hours, 8.0);
     }   
     //method to calculateSSSDeduction
