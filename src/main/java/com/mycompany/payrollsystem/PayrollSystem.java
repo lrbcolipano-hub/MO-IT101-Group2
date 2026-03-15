@@ -77,7 +77,6 @@ public class PayrollSystem {
         // Close the scanner to prevent resource leaks
         sc.close();
     }
-    // a method that returns printed responses base on input choices of the employee
     // Method that handles the employee role menu and actions
     public static void runEmployeeRole(Scanner sc, String empFile) {
 
@@ -137,9 +136,6 @@ public class PayrollSystem {
         // [5] = Hourly Rate
         String[] employeeDetails = new String[6];
 
-        // Variable to temporarily store employee ID
-        String id = "";
-
         try {
 
             // Create a BufferedReader to read the employee CSV file
@@ -159,7 +155,7 @@ public class PayrollSystem {
                 if (data[0].equals(inputEmpId)){
 
                     // Extract needed information from the CSV columns
-                    id = data[0];
+                    String id = data[0];
                     String lastName = data[1];
                     String firstName = data[2];
                     String birthDate = data[3];
@@ -216,7 +212,7 @@ public class PayrollSystem {
         // Check if the entered employee ID matches the ID retrieved from the file
         // If it does not match, it means the employee does not exist in the file
         if (!inputEmpId.equals(id)) {
-            System.out.println("Employee does not exit.");
+            System.out.println("Employee does not exist.");
             return; // Stop the method if employee is not found
         }
 
@@ -417,9 +413,6 @@ public class PayrollSystem {
                         // Skip the header row (which contains the text "Employee #")
                         if (!inputEmpId.equals("Employee #")){
 
-                            // Print employee personal details
-                            printEmployee(empFile, inputEmpId);
-
                             // Print payroll / worked hours / payslip details
                             printWorkedDetails(attendaceFile, empFile, inputEmpId);
                         }
@@ -461,7 +454,7 @@ public class PayrollSystem {
 
             // Check if the employee ID entered exists in the file
             if (!inputEmpId.equals(employeeDetail[0])) {
-                System.out.println("Employee does not exit.");
+                System.out.println("Employee does not exist.");
                 return; // stop the method if employee is not found
             }
 
