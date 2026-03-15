@@ -136,9 +136,6 @@ public class PayrollSystem {
         // [5] = Hourly Rate
         String[] employeeDetails = new String[6];
 
-        // Variable to temporarily store employee ID
-        String id = "";
-
         try {
 
             // Create a BufferedReader to read the employee CSV file
@@ -158,7 +155,7 @@ public class PayrollSystem {
                 if (data[0].equals(inputEmpId)){
 
                     // Extract needed information from the CSV columns
-                    id = data[0];
+                    String id = data[0];
                     String lastName = data[1];
                     String firstName = data[2];
                     String birthDate = data[3];
@@ -415,9 +412,6 @@ public class PayrollSystem {
 
                         // Skip the header row (which contains the text "Employee #")
                         if (!inputEmpId.equals("Employee #")){
-
-                            // Print employee personal details
-                            printEmployee(empFile, inputEmpId);
 
                             // Print payroll / worked hours / payslip details
                             printWorkedDetails(attendaceFile, empFile, inputEmpId);
