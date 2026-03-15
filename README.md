@@ -2,6 +2,7 @@
 MotorPH Payroll System
 
 Team Details and Contribution:
+
 Brixter Colipano
   -Corrected and finalized the code to match Milestone 2 submission. Created the repository for everyone, lead the group and facilated task for each members. Checked each members task and corrected and revised the whole project plan.
 
