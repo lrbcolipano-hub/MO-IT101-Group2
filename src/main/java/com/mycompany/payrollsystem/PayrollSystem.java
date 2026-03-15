@@ -77,7 +77,6 @@ public class PayrollSystem {
         // Close the scanner to prevent resource leaks
         sc.close();
     }
-    // a method that returns printed responses base on input choices of the employee
     // Method that handles the employee role menu and actions
     public static void runEmployeeRole(Scanner sc, String empFile) {
 
