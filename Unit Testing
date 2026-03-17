@@ -1,0 +1,146 @@
+package com.mycompany.payrollsystem;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.time.LocalTime;
+
+public class PayrollSystemTest {
+
+    // =========================
+    // computeHours() TESTS
+    // =========================
+
+    @Test
+    void testComputeHours_NormalDay() {
+        LocalTime login = LocalTime.of(8, 0);
+        LocalTime logout = LocalTime.of(17, 0);
+
+        double result = PayrollSystem.computeHours(login, logout);
+
+        assertEquals(8.0, result, 0.01);
+    }
+
+    @Test
+    void testComputeHours_GracePeriod() {
+        LocalTime login = LocalTime.of(8, 10); // within grace
+        LocalTime logout = LocalTime.of(17, 0);
+
+        double result = PayrollSystem.computeHours(login, logout);
+
+        assertEquals(8.0, result, 0.01);
+    }
+
+    @Test
+    void testComputeHours_LateLogin() {
+        LocalTime login = LocalTime.of(9, 0);
+        LocalTime logout = LocalTime.of(17, 0);
+
+        double result = PayrollSystem.computeHours(login, logout);
+
+        assertTrue(result < 8.0);
+    }
+
+    @Test
+    void testComputeHours_LogoutAfterCutoff() {
+        LocalTime login = LocalTime.of(8, 0);
+        LocalTime logout = LocalTime.of(18, 0); // beyond cutoff
+
+        double result = PayrollSystem.computeHours(login, logout);
+
+        assertEquals(8.0, result, 0.01);
+    }
+
+    @Test
+    void testComputeHours_InvalidTime() {
+        LocalTime login = LocalTime.of(10, 0);
+        LocalTime logout = LocalTime.of(9, 0);
+
+        double result = PayrollSystem.computeHours(login, logout);
+
+        assertEquals(0.0, result);
+    }
+
+    // =========================
+    // SSS TESTS
+    // =========================
+
+    @Test
+    void testSSSBelowMinimum() {
+        double result = PayrollSystem.calculateSSSDeduction(3000);
+        assertEquals(135, result);
+    }
+
+    @Test
+    void testSSSMidRange() {
+        double result = PayrollSystem.calculateSSSDeduction(4000);
+        assertTrue(result > 135);
+    }
+
+    @Test
+    void testSSSMaxCap() {
+        double result = PayrollSystem.calculateSSSDeduction(100000);
+        assertEquals(1125, result);
+    }
+
+    // =========================
+    // PhilHealth TESTS
+    // =========================
+
+    @Test
+    void testPhilHealthLowSalary() {
+        double result = PayrollSystem.computePhilHealth(9000);
+        assertEquals(300, result);
+    }
+
+    @Test
+    void testPhilHealthMidSalary() {
+        double result = PayrollSystem.computePhilHealth(20000);
+        assertEquals(600, result);
+    }
+
+    @Test
+    void testPhilHealthHighSalary() {
+        double result = PayrollSystem.computePhilHealth(70000);
+        assertEquals(1800, result);
+    }
+
+    // =========================
+    // Pag-IBIG TESTS
+    // =========================
+
+    @Test
+    void testPagibigLowSalary() {
+        double result = PayrollSystem.computePagibigEmployee(1000);
+        assertEquals(10, result);
+    }
+
+    @Test
+    void testPagibigCap() {
+        double result = PayrollSystem.computePagibigEmployee(10000);
+        assertEquals(100, result);
+    }
+
+    // =========================
+    // Withholding Tax TESTS
+    // =========================
+
+    @Test
+    void testTaxBelowThreshold() {
+        double result = PayrollSystem.computeWithholdingTax(20000);
+        assertEquals(0, result);
+    }
+
+    @Test
+    void testTaxSecondBracket() {
+        double result = PayrollSystem.computeWithholdingTax(25000);
+        assertEquals((25000 - 20833) * 0.20, result, 0.01);
+    }
+
+    @Test
+    void testTaxHigherBracket() {
+        double result = PayrollSystem.computeWithholdingTax(40000);
+        double expected = 2500 + ((40000 - 33333) * 0.25);
+        assertEquals(expected, result, 0.01);
+    }
+}
