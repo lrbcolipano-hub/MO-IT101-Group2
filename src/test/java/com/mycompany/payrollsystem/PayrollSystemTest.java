@@ -111,13 +111,13 @@ public class PayrollSystemTest {
 
     @Test
     void testPagibigLowSalary() {
-        double result = PayrollSystem.computePagIbig(1000);
+        double result = PayrollSystem.computePagibigEmployee(1000);
         assertEquals(10, result);
     }
 
     @Test
     void testPagibigCap() {
-        double result = PayrollSystem.computePagIbig(10000);
+        double result = PayrollSystem.computePagibigEmployee(10000);
         assertEquals(100, result);
     }
 
