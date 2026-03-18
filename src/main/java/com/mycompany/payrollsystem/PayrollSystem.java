@@ -1,9 +1,9 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  */
-
+ 
 package com.mycompany.payrollsystem;
-
+ 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -13,13 +13,13 @@ import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
-
+ 
 /**
  *
  * @author Anya
  */
 public class PayrollSystem {
-
+ 
     public static void main(String[] args) {
 
         // File path for the CSV file that contains employee details
@@ -684,3 +684,4 @@ public class PayrollSystem {
             return 200833.33 + ((taxableIncome - 666667) * 0.35);
     }
 }
+ 
