@@ -22,7 +22,7 @@ import java.util.Scanner;
 public class PayrollSystem {
     
     public static void main(String[] args) {
- 
+
         // File path for the CSV file that contains employee details
         final String empFile = "src\\main\\java\\com\\mycompany\\payrollsystem\\MotorPH_Employee Data - Employee Details.csv";
         // File path for the CSV file that contains employee attendance records
@@ -30,10 +30,10 @@ public class PayrollSystem {
  
         // Scanner object to read input from the user
         Scanner sc = new Scanner(System.in);
- 
+
         // Stored system password for login authentication
         final String validPassword = "12345";
- 
+
         // Display system header
         System.out.println("============================================");
         System.out.println("        MotorPH PAYROLL SYSTEM");
@@ -72,7 +72,7 @@ public class PayrollSystem {
             System.out.println("1. Enter your Employee Number");
             System.out.println("2. Exit the program");
             System.out.println("    ");
- 
+
             // Ask the user to choose an option
             System.out.print("Enter your choice (1-2): ");
             String inputChoice = sc.nextLine();
@@ -90,7 +90,7 @@ public class PayrollSystem {
                 System.out.println("Invalid Choice");
                 System.out.println("    ");
             }
-        }
+        }         
     }
     // Method that searches the employee's basic information
     public static void searchEmployeeId(String empFile, String inputEmpId) {
@@ -125,10 +125,15 @@ public class PayrollSystem {
             System.out.println("\n============================================");
             System.out.println("        PAYROLL STAFF MENU");
             System.out.println("============================================");
+
+            // Display available options for payroll staff
             System.out.println("  [1] Process Payroll");
             System.out.println("  [2] Exit");
+
+            // Ask the user to enter their menu choice
             System.out.print("Enter your choice (1-2): ");
- 
+
+            // Read and trim the user input
             String choice = sc.nextLine().trim();
             
             // Check the user's choice
@@ -150,12 +155,15 @@ public class PayrollSystem {
             System.out.println("  [1] One employee");
             System.out.println("  [2] All employees");
             System.out.println("  [3] exit");
+
+            // Ask the payroll staff to choose an option
             System.out.print("Choice: ");
- 
             String choice = sc.nextLine().trim();
- 
+
+            // Option 1: Process payroll for a single employee
             if (choice.equals("1")) {
- 
+
+                // Ask the user to enter the employee number
                 System.out.print("Enter Employee Number: ");
                 String inputEmpId = sc.nextLine().toLowerCase();
                 printWorkedDetails(attendanceFile, empFile, inputEmpId);
@@ -449,7 +457,6 @@ public class PayrollSystem {
         } 
         else {
             return 200833.33 + ((taxableIncome - 666667) * 0.35);
-        }
     }
     //Method to compute Pag-ibig deduction
     static double computePagIbig(double basicSalary) {
