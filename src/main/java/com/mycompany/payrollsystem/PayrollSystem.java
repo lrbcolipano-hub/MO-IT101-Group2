@@ -22,7 +22,7 @@ import java.util.Scanner;
 public class PayrollSystem {
     
     public static void main(String[] args) {
-
+ 
         // File path for the CSV file that contains employee details
         final String empFile = "src\\main\\java\\com\\mycompany\\payrollsystem\\MotorPH_Employee Data - Employee Details.csv";
         // File path for the CSV file that contains employee attendance records
@@ -30,10 +30,10 @@ public class PayrollSystem {
  
         // Scanner object to read input from the user
         Scanner sc = new Scanner(System.in);
-
+ 
         // Stored system password for login authentication
         final String validPassword = "12345";
-
+ 
         // Display system header
         System.out.println("============================================");
         System.out.println("        MotorPH PAYROLL SYSTEM");
@@ -72,7 +72,7 @@ public class PayrollSystem {
             System.out.println("1. Enter your Employee Number");
             System.out.println("2. Exit the program");
             System.out.println("    ");
-
+ 
             // Ask the user to choose an option
             System.out.print("Enter your choice (1-2): ");
             String inputChoice = sc.nextLine();
@@ -90,7 +90,7 @@ public class PayrollSystem {
                 System.out.println("Invalid Choice");
                 System.out.println("    ");
             }
-        }         
+        }
     }
     // Method that searches the employee's basic information
     public static void searchEmployeeId(String empFile, String inputEmpId) {
@@ -125,24 +125,21 @@ public class PayrollSystem {
             System.out.println("\n============================================");
             System.out.println("        PAYROLL STAFF MENU");
             System.out.println("============================================");
-
-            // Display available options for payroll staff
             System.out.println("  [1] Process Payroll");
             System.out.println("  [2] Exit");
-
-            // Ask the user to enter their menu choice
             System.out.print("Enter your choice (1-2): ");
-
-            // Read and trim the user input
+ 
             String choice = sc.nextLine().trim();
             
             // Check the user's choice
             if (choice.equals("1")) {                               // If option 1 is selected, run the payroll processing method
                 runProcessPayroll(empFile, attendanceFile, sc);     // This will compute employee payroll based on employee and attendance file
-            } else if (choice.equals("2")) {                        // If option 2 is selected, terminate the program
+            } 
+            else if (choice.equals("2")) {                        // If option 2 is selected, terminate the program
                 System.out.println("Program terminated.");          // If the input is not 1 or 2, display an error message
                 return;
-            } else {
+            } 
+            else {
                 System.out.println("Invalid choice. Please enter 1-2.");
             }
         }
@@ -155,29 +152,29 @@ public class PayrollSystem {
             System.out.println("  [1] One employee");
             System.out.println("  [2] All employees");
             System.out.println("  [3] exit");
-
-            // Ask the payroll staff to choose an option
             System.out.print("Choice: ");
+ 
             String choice = sc.nextLine().trim();
-
-            // Option 1: Process payroll for a single employee
+ 
             if (choice.equals("1")) {
-
-                // Ask the user to enter the employee number
+ 
                 System.out.print("Enter Employee Number: ");
                 String inputEmpId = sc.nextLine().toLowerCase();
                 printWorkedDetails(attendanceFile, empFile, inputEmpId);
  
-            } else if (choice.equals("2")) {
+            } 
+            else if (choice.equals("2")) {
                 String[][] employees = empDetails(empFile);
                 // Loop through all employees
                 for (int i = 0; i < employees.length; i++) {
                 String inputEmpId = employees[i][0];
                 printWorkedDetails(attendanceFile, empFile, inputEmpId);
                 }
-            } else if (choice.equals("3")) {
+            } 
+            else if (choice.equals("3")) {
                 System.exit(0);
-            } else {
+            } 
+            else {
                 System.out.println("Invalid choice. Please enter 1, 2, or 3.");
             }
         }
@@ -311,10 +308,12 @@ public class PayrollSystem {
                 employeesList.add(employeeDetails);
             }
             br.close();
-        } catch (FileNotFoundException ex) {
+        } 
+        catch (FileNotFoundException ex) {
             System.getLogger(PayrollSystem.class.getName())
                   .log(System.Logger.Level.ERROR, (String) null, ex);
-        } catch (IOException ex) {
+        } 
+        catch (IOException ex) {
             System.getLogger(PayrollSystem.class.getName())
                   .log(System.Logger.Level.ERROR, (String) null, ex);
         }
@@ -370,10 +369,12 @@ public class PayrollSystem {
                 attendanceHours[1] = secondHalf;
             }
             br.close();
-        } catch (FileNotFoundException ex) {
+        } 
+        catch (FileNotFoundException ex) {
             System.getLogger(PayrollSystem.class.getName())
                   .log(System.Logger.Level.ERROR, (String) null, ex);
-        } catch (IOException ex) {
+        } 
+        catch (IOException ex) {
             System.getLogger(PayrollSystem.class.getName())
                   .log(System.Logger.Level.ERROR, (String) null, ex);
         }
@@ -430,9 +431,11 @@ public class PayrollSystem {
  
         if (basicSalary <= 10000) {             // Computes PhilHealth contribution based on basic salary:
             return 300;                         // - Fixed 300 if salary ≤ 10,000
-        } else if (basicSalary <= 59999.99) {   // - 3% of salary if between 10,001 and 59,999.99
+        } 
+        else if (basicSalary <= 59999.99) {   // - 3% of salary if between 10,001 and 59,999.99
             return basicSalary * 0.03;          // - Capped at 1,800 if salary ≥ 60,000
-        } else {
+        } 
+        else {
             return 1800;
         }
     }
@@ -457,13 +460,15 @@ public class PayrollSystem {
         } 
         else {
             return 200833.33 + ((taxableIncome - 666667) * 0.35);
+        }
     }
     //Method to compute Pag-ibig deduction
     static double computePagIbig(double basicSalary) {
  
         if (basicSalary <= 1500) {              // 1% for salaries ≤ 1,500, otherwise 2% capped at ₱100
             return basicSalary * 0.01;
-        } else {
+        } 
+        else {
             return Math.min(basicSalary * 0.02, 100.00);
         }
     }
