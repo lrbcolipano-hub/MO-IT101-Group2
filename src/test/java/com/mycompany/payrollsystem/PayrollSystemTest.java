@@ -67,19 +67,19 @@ public class PayrollSystemTest {
 
     @Test
     void testSSSBelowMinimum() {
-        double result = PayrollSystem.calculateSSSDeduction(3000);
+        double result = PayrollSystem.computeSss(3000);
         assertEquals(135, result);
     }
 
     @Test
     void testSSSMidRange() {
-        double result = PayrollSystem.calculateSSSDeduction(4000);
+        double result = PayrollSystem.computeSss(4000);
         assertTrue(result > 135);
     }
 
     @Test
     void testSSSMaxCap() {
-        double result = PayrollSystem.calculateSSSDeduction(100000);
+        double result = PayrollSystem.computeSss(100000);
         assertEquals(1125, result);
     }
 
