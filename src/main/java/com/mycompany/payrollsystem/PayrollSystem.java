@@ -94,7 +94,7 @@ public class PayrollSystem {
     }
     // Method that searches the employee's basic information
     public static void searchEmployeeId(String empFile, String inputEmpId) {
-
+        //Calls empDetails method to load employee data from a file into a 2D array (each row = one employee).
         String[][] employees = empDetails(empFile);
         boolean found = false;
 
@@ -160,15 +160,15 @@ public class PayrollSystem {
  
                 System.out.print("Enter Employee Number: ");
                 String inputEmpId = sc.nextLine().toLowerCase();
-                printWorkedDetails(attendanceFile, empFile, inputEmpId);
+                printPayrollDetails(attendanceFile, empFile, inputEmpId);
  
             } 
             else if (choice.equals("2")) {
-                String[][] employees = empDetails(empFile);
-                // Loop through all employees
-                for (int i = 0; i < employees.length; i++) {
-                String inputEmpId = employees[i][0];
-                printWorkedDetails(attendanceFile, empFile, inputEmpId);
+                String[][] employees = empDetails(empFile); //Calls empDetails method to load employee data from a file into a 2D array (each row = one employee).
+                // The code goes through every employee, gets their ID, and uses it to show their payroll details.
+                for (String[] employee : employees) {
+                    String inputEmpId = employee[0];
+                    printPayrollDetails(attendanceFile, empFile, inputEmpId);
                 }
             } 
             else if (choice.equals("3")) {
@@ -217,7 +217,7 @@ public class PayrollSystem {
 
     // Method that calculates and prints the employee's worked hours, salary,
     // deductions, and net pay for each payroll cutoff (June to December)
-    public static void printWorkedDetails(String attendanceFile, String empFile, String inputEmpId) {
+    public static void printPayrollDetails(String attendanceFile, String empFile, String inputEmpId) {
 
         String[][] employees = empDetails(empFile);
         boolean found = false;
@@ -248,7 +248,7 @@ public class PayrollSystem {
                     // Monthly gross income
                     double monthlyGrossIncome = (firstHalf + secondHalf) * hourlyRate;
                     //deductions
-                    double sssDeduction        = calculateSSSDeduction(monthlyGrossIncome);
+                    double sssDeduction        = computeSss(monthlyGrossIncome);
                     double philHealthDeduction = computePhilHealth(basicSalary) / 2;
                     double pagIbigDeduction    = computePagIbig(basicSalary);
                     
@@ -413,7 +413,7 @@ public class PayrollSystem {
     }    
     
     // Method to calculate SSS contribution based on monthly gross income
-    public static double calculateSSSDeduction(double monthlyGrossIncome) {
+    public static double computeSss(double monthlyGrossIncome) {
  
         double initialContribution    = 135;    // Calculates SSS deduction based on monthly income:
         double increment              = 22.5;   // Starts at a base contribution, increases per ₱500 salary bracket,
@@ -474,7 +474,7 @@ public class PayrollSystem {
     }
     //method that computes taxable income
     static double computeTaxableIncome(double monthlyGrossIncome, double basicSalary){
-        return monthlyGrossIncome - calculateSSSDeduction(monthlyGrossIncome)- (computePhilHealth(basicSalary) / 2)- computePagIbig(basicSalary);
+        return monthlyGrossIncome - computeSss(monthlyGrossIncome)- (computePhilHealth(basicSalary) / 2)- computePagIbig(basicSalary);
     }
     //method that computes total deductions
     static double computeDeductions(double sssDeduction, double philHealthDeduction, double pagIbigDeduction, double withholdingTax ){
