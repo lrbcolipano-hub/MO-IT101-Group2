@@ -22,7 +22,7 @@ import java.util.Scanner;
 public class PayrollSystem {
     
     public static void main(String[] args) {
- 
+
         // File path for the CSV file that contains employee details
         final String empFile = "src\\main\\java\\com\\mycompany\\payrollsystem\\MotorPH_Employee Data - Employee Details.csv";
         // File path for the CSV file that contains employee attendance records
@@ -30,10 +30,10 @@ public class PayrollSystem {
  
         // Scanner object to read input from the user
         Scanner sc = new Scanner(System.in);
- 
+
         // Stored system password for login authentication
         final String validPassword = "12345";
- 
+
         // Display system header
         System.out.println("============================================");
         System.out.println("        MotorPH PAYROLL SYSTEM");
@@ -55,24 +55,27 @@ public class PayrollSystem {
             sc.close();
             return;
         }
+        //Calls empDetails method to load employee data from a file into a 2D array (each row = one employee).
+        String[][] employees = empDetails(empFile);
+
         // If login is successful, determine which role the user selected
         if (username.equals("employee")) {
-            runEmployeeRole(sc, empFile);
+            runEmployeeRole(sc, employees);
         } 
         else {
-            runPayroll(sc, attendanceFile, empFile);
+            runPayroll(sc, attendanceFile, employees);
         }
         sc.close();
     }
 
     // Method that handles the employee role menu and actions
-    public static void runEmployeeRole(Scanner sc, String empFile) {
+    public static void runEmployeeRole(Scanner sc, String[][] employees) {
         while (true) {
             // Display menu options for the employee
             System.out.println("1. Enter your Employee Number");
             System.out.println("2. Exit the program");
             System.out.println("    ");
- 
+
             // Ask the user to choose an option
             System.out.print("Enter your choice (1-2): ");
             String inputChoice = sc.nextLine();
@@ -81,7 +84,7 @@ public class PayrollSystem {
             if (inputChoice.equals("1")) {                          // If the user selects "1", prompt them to enter their employee number
                 System.out.print("Enter your Employee Number: ");   //and call the method to display the employee's details.
                 String inputEmpId = sc.nextLine().toLowerCase();    // If the user selects "2", exit the current method.
-                searchEmployeeId(empFile, inputEmpId);                 // For any other input, display an "Invalid Choice" message.
+                searchEmployeeId(employees, inputEmpId);                 // For any other input, display an "Invalid Choice" message.
             } 
             else if (inputChoice.equals("2")) {
                 return;
@@ -90,12 +93,11 @@ public class PayrollSystem {
                 System.out.println("Invalid Choice");
                 System.out.println("    ");
             }
-        }
+        }         
     }
     // Method that searches the employee's basic information
-    public static void searchEmployeeId(String empFile, String inputEmpId) {
-        //Calls empDetails method to load employee data from a file into a 2D array (each row = one employee).
-        String[][] employees = empDetails(empFile);
+    public static void searchEmployeeId(String[][] employees, String inputEmpId) {
+
         boolean found = false;
 
         // Loop through all employees
@@ -118,22 +120,27 @@ public class PayrollSystem {
         }
     }
     // Method that handles the payroll staff menu and available actions
-    public static void runPayroll(Scanner sc, String attendanceFile, String empFile) {
+    public static void runPayroll(Scanner sc, String attendanceFile, String[][] employees) {
  
         while (true) {
             // Display payroll staff menu header and available options for payroll staff
             System.out.println("\n============================================");
             System.out.println("        PAYROLL STAFF MENU");
             System.out.println("============================================");
+
+            // Display available options for payroll staff
             System.out.println("  [1] Process Payroll");
             System.out.println("  [2] Exit");
+
+            // Ask the user to enter their menu choice
             System.out.print("Enter your choice (1-2): ");
- 
+
+            // Read and trim the user input
             String choice = sc.nextLine().trim();
             
             // Check the user's choice
             if (choice.equals("1")) {                               // If option 1 is selected, run the payroll processing method
-                runProcessPayroll(empFile, attendanceFile, sc);     // This will compute employee payroll based on employee and attendance file
+                runProcessPayroll(employees, attendanceFile, sc);     // This will compute employee payroll based on employee and attendance file
             } 
             else if (choice.equals("2")) {                        // If option 2 is selected, terminate the program
                 System.out.println("Program terminated.");          // If the input is not 1 or 2, display an error message
@@ -145,30 +152,32 @@ public class PayrollSystem {
         }
     }
     // Method that allows payroll staff to process payroll for one or all employees
-    public static void runProcessPayroll(String empFile, String attendanceFile, Scanner sc) {
+    public static void runProcessPayroll(String[][] employees, String attendanceFile, Scanner sc) {
  
         while (true) {
             System.out.println("\n--- Process Payroll ---");
             System.out.println("  [1] One employee");
             System.out.println("  [2] All employees");
             System.out.println("  [3] exit");
+
+            // Ask the payroll staff to choose an option
             System.out.print("Choice: ");
- 
             String choice = sc.nextLine().trim();
- 
+
+            // Option 1: Process payroll for a single employee
             if (choice.equals("1")) {
- 
+
+                // Ask the user to enter the employee number
                 System.out.print("Enter Employee Number: ");
                 String inputEmpId = sc.nextLine().toLowerCase();
-                printPayrollDetails(attendanceFile, empFile, inputEmpId);
+                printPayrollDetails(attendanceFile, employees, inputEmpId);
  
             } 
             else if (choice.equals("2")) {
-                String[][] employees = empDetails(empFile); //Calls empDetails method to load employee data from a file into a 2D array (each row = one employee).
                 // The code goes through every employee, gets their ID, and uses it to show their payroll details.
                 for (String[] employee : employees) {
                     String inputEmpId = employee[0];
-                    printPayrollDetails(attendanceFile, empFile, inputEmpId);
+                    printPayrollDetails(attendanceFile, employees, inputEmpId);
                 }
             } 
             else if (choice.equals("3")) {
@@ -217,9 +226,8 @@ public class PayrollSystem {
 
     // Method that calculates and prints the employee's worked hours, salary,
     // deductions, and net pay for each payroll cutoff (June to December)
-    public static void printPayrollDetails(String attendanceFile, String empFile, String inputEmpId) {
+    public static void printPayrollDetails(String attendanceFile, String[][] employees, String inputEmpId) {
 
-        String[][] employees = empDetails(empFile);
         boolean found = false;
 
         // Find the employee first
@@ -291,6 +299,9 @@ public class PayrollSystem {
                 if (data[0].equals("Employee #")) {
                     continue;
                 }
+                if (data.length < 19) {//validation if even one row is malformed
+                    continue;
+                }
 
                 String[] employeeDetails = new String[6];
 
@@ -344,9 +355,9 @@ public class PayrollSystem {
             while ((line = br.readLine()) != null) {
  
                 if (line.trim().isEmpty()) continue;       // Skip empty lines in the file
-                String[] data = line.split(",");           // Split the CSV line into columns
+                String[] data = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");  // Split the CSV line into columns
                 if (!data[0].equals(inputEmpId)) continue; // Skip records that do not belong to the entered employee ID
-                
+                if (data.length < 6) continue; //validation if even one row is malformed
                 // Extract and split the date field (format: MM/DD/YYYY)
                 String[] dateParts  = data[3].split("/");
                 int recordMonth     = Integer.parseInt(dateParts[0]);
